@@ -118,15 +118,14 @@ export function accessibleBy<T extends WithAcl, User = unknown>(
   groupOrUser?: string | User,
 ): FilterQuery<T> {
   const groups = groupOrUserToGroups(groupOrUser);
+
   return {
     acl: {
       $or: [
         { publicPolicy: action },
-        {
-          ...groups.map((group) => ({
-            [`policies.${group}`]: action,
-          })),
-        },
+        ...groups.map((group) => ({
+          [`policies.${group}`]: action,
+        })),
       ],
     },
   };

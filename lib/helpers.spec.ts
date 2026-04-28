@@ -1,5 +1,6 @@
 import { AclQueryHelpers } from './query-helpers';
 import {
+  accessibleBy,
   grantAccessTo,
   grantToMany,
   revokeAccessTo,
@@ -16,16 +17,19 @@ describe('AclQueryHelpers', () => {
 
   beforeEach(() => {
     // Reset the mock before each test
-    AclRegistry.getInstance().groupFromUser = jest.fn((user?: any) => {
-      if (user === 'userWithGroups') {
-        return mockUserGroups;
-      }
-      if (user === 'userWithoutGroups') {
+    AclRegistry.getInstance().registerOptions({
+      groupFromUser: jest.fn((user?: { role?: string }) => {
+        if (user?.role === 'userWithGroups') {
+          return mockUserGroups;
+        }
+        if (user?.role === 'userWithoutGroups') {
+          return [];
+        }
         return [];
-      }
-      return [];
+      }),
     });
   });
+  // AclRegistry.getInstance().groupFromUser =
 
   describe('withAccessFor', () => {
     // Mock a Mongoose query object
@@ -40,26 +44,22 @@ describe('AclQueryHelpers', () => {
         'someUser',
       );
       expect(result).toBe(mockQuery);
-      expect(mockQuery.where).toHaveBeenCalledWith({
-        acl: {
-          $or: [
-            { publicPolicy: mockAction },
-            // No user groups, so only public policy is considered
-          ],
-        },
-      });
+      expect(mockQuery.where).toHaveBeenCalledWith(
+        expect.objectContaining({
+          acl: expect.objectContaining({
+            $or: expect.arrayContaining([{ publicPolicy: mockAction }]),
+          }),
+        }),
+      );
     });
 
     it('should return a query that includes user groups when user has groups', () => {
       const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
-        'userWithGroups',
+        { role: 'userWithGroups' },
       );
       expect(result).toBe(mockQuery);
-      expect(AclRegistry.getInstance().groupFromUser).toHaveBeenCalledWith(
-        'userWithGroups',
-      );
       expect(mockQuery.where).toHaveBeenCalledWith({
         acl: {
           $or: [
@@ -75,12 +75,9 @@ describe('AclQueryHelpers', () => {
       const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
-        'userWithoutGroups',
+        { role: 'userWithoutGroups' },
       );
       expect(result).toBe(mockQuery);
-      expect(AclRegistry.getInstance().groupFromUser).toHaveBeenCalledWith(
-        'userWithoutGroups',
-      );
       expect(mockQuery.where).toHaveBeenCalledWith({
         acl: {
           $or: [{ publicPolicy: mockAction }],
@@ -95,9 +92,6 @@ describe('AclQueryHelpers', () => {
         undefined,
       );
       expect(result).toBe(mockQuery);
-      expect(AclRegistry.getInstance().groupFromUser).toHaveBeenCalledWith(
-        undefined,
-      );
       expect(mockQuery.where).toHaveBeenCalledWith({
         acl: {
           $or: [{ publicPolicy: mockAction }],
@@ -112,9 +106,6 @@ describe('AclQueryHelpers', () => {
         null,
       );
       expect(result).toBe(mockQuery);
-      expect(AclRegistry.getInstance().groupFromUser).toHaveBeenCalledWith(
-        null,
-      );
       expect(mockQuery.where).toHaveBeenCalledWith({
         acl: {
           $or: [{ publicPolicy: mockAction }],

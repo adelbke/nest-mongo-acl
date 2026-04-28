@@ -1,4 +1,4 @@
-import { AclRegistry } from 'lib/acl.registry';
+import { AclRegistry } from '../acl.registry';
 
 export function groupOrUserToGroups<User = unknown>(
   groupOrUser?: string | User,
@@ -6,7 +6,7 @@ export function groupOrUserToGroups<User = unknown>(
   if (typeof groupOrUser == 'string') {
     return [groupOrUser];
   }
-  if (!groupOrUser) {
+  if (!groupOrUser || groupOrUser == null) {
     return [];
   }
   const groups = AclRegistry.getInstance().groupFromUser(groupOrUser);
