@@ -2,6 +2,16 @@
 
 This is a library that offers Granular Access Control to documents in mongodb collections by maintaining access control lists
 
+- [Nestjs Mongoose Access Control lists](#nestjs-mongoose-access-control-lists)
+  - [Installation](#installation)
+  - [Setup](#setup)
+    - [Setup in NestJS](#setup-in-nestjs)
+    - [Setup With Typegoose](#setup-with-typegoose)
+    - [Setup with @nestjs/mongoose](#setup-with-nestjsmongoose)
+  - [Usage](#usage)
+    - [Grant/Revoke Access to a single document resource](#grantrevoke-access-to-a-single-document-resource)
+    - [Filter by Access rights](#filter-by-access-rights)
+    - [Check Access Rights on documents](#check-access-rights-on-documents)
 
 
 ## Installation
