@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "A NestJS module for Access Control List (ACL) management using MongoDB, Mongoose, and Typegoose.",
   "author": "adelbke",
-  "private": true,
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
