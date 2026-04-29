@@ -9,12 +9,12 @@ function withAccessFor<T extends WithAcl>(
   this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
   action: string,
   group: string,
-);
+): QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>;
 function withAccessFor<T extends WithAcl, IUser = unknown>(
   this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
   action: string,
   user?: IUser,
-);
+): QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>;
 function withAccessFor<T extends WithAcl, IUser = unknown>(
   this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
   action: string,
