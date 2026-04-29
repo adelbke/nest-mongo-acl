@@ -15,3 +15,4 @@ export { AccessControlLists } from './mongoose-plugin';
 export { AclService } from './acl.service';
 export { AclModule } from './acl.module';
 export { AclModuleOptions } from './acl.module-options';
+export { Acl, AclSchemaDefinition } from './schema/acl.schema';
