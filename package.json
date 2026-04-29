@@ -1,14 +1,13 @@
 {
   "name": "@biocomputingup/nest-mongo-acl",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A NestJS module for Access Control List (ACL) management using MongoDB, Mongoose, and Typegoose.",
-  "author": "adelbke",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "nest build",
+    "build": "rimraf -rf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -21,6 +20,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "author": {
+    "name": "Kamel Eddine Adel Bouhraoua",
+    "email": "adelbouhraoua23@gmail.com",
+    "url": "https://github.com/adelbke"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
