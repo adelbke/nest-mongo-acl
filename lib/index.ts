@@ -7,6 +7,7 @@ export {
   grantToMany,
   grantPublicAccess,
   revokePublicAccess,
+  accessibleBy,
 } from './utils/helpers';
 export { WithAcl } from './interfaces';
 export { IAclMethods, AclMethodsCls } from './methods';
