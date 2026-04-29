@@ -5,6 +5,7 @@ This is a library that offers Granular Access Control to documents in mongodb co
 ## Table of Contents
 - [Nestjs Mongoose Access Control lists](#nestjs-mongoose-access-control-lists)
   - [Table of Contents](#table-of-contents)
+  - [Version Chart](#version-chart)
   - [Installation](#installation)
   - [Setup](#setup)
     - [Setup in NestJS](#setup-in-nestjs)
@@ -15,6 +16,12 @@ This is a library that offers Granular Access Control to documents in mongodb co
     - [Filter by Access rights](#filter-by-access-rights)
     - [Check Access Rights on documents](#check-access-rights-on-documents)
 
+## Version Chart
+
+| @biocomputingup/nest-mongo-acl | @nestjs/core |
+| ------------------------------ | ------------ |
+| ^0.0.2                         | ^10.0.0      |
+| ^1.0.0                         | ^11.0.0      |
 
 ## Installation
 
