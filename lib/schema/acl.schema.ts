@@ -12,8 +12,9 @@ class Acl implements IAcl {
 
   @prop({ type: () => [String] }, PropType.MAP) // For typegoose schema
   @Prop({ type: Map, of: { type: [String] } }) // For mongoose schema
-  policies: Map<string, string[]>;
+  policies: Record<string, string[]>;
 }
+
 const AclSchema = SchemaFactory.createForClass(Acl);
 const AclSchemaDefinition: SchemaDefinition<IAcl> = {
   policies: {

@@ -797,7 +797,7 @@
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.1.0.tgz#1e3e4bd05c1cc7a0b2ddbd8a03f39f6e4b5e6cfe"
   integrity sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==
 
-"@m8a/nestjs-typegoose@12":
+"@m8a/nestjs-typegoose@^12.0.1":
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/@m8a/nestjs-typegoose/-/nestjs-typegoose-12.0.1.tgz#32c7fa6068f05aae909279e9e8a1a005288ce5b1"
   integrity sha512-l8F0IbcGFBSN5xacgYPFfjZlvXzGF/HH4IC+H1GQU81gcr0etW2xP8dqKSuOWoF5H2njaOoNMyhAvt6oqpSL3Q==
@@ -858,7 +858,7 @@
     path-to-regexp "8.4.2"
     tslib "2.8.1"
 
-"@nestjs/mongoose@11":
+"@nestjs/mongoose@^10.0.0 || ^11.0.0":
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/@nestjs/mongoose/-/mongoose-11.0.4.tgz#cab11cf15517fcf2e73323ca0cb5d3d6588c28f3"
   integrity sha512-LUOlUeSOfbjdIu22QwOmczv2CzJQr9LUBo2mOfbXrGCu2svpr5Hiu71zBFrb/9UC+H8BjGMKbBOq1nEbMF6ZJA==

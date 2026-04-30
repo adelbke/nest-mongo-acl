@@ -4,7 +4,7 @@ import { IAclMethods } from './methods';
 import { Acl } from './schema/acl.schema';
 
 export interface IAcl {
-  policies: Map<string, string[]>;
+  policies: Record<string, string[]>;
   publicPolicy: string[];
 }
 
@@ -20,8 +20,8 @@ export type IAclModel = Model<WithAcl, IAclQueryHelpers, IAclMethods>;
 // export type IAclInstanceMethods = IAclMethods;
 
 // Parent Document Type using Acl
-export type IAclDocument = HydratedDocument<
-  WithAcl,
+export type IAclDocument<T extends WithAcl = WithAcl> = HydratedDocument<
+  T,
   IAclMethods,
   IAclQueryHelpers
 >;

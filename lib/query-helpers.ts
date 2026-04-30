@@ -1,28 +1,30 @@
 import { WithAcl } from './interfaces';
-import { FilterQuery, HydratedDocument, QueryWithHelpers } from 'mongoose';
+import {
+  FilterQuery,
+  HydratedDocument,
+  // IfEquals,
+  QueryWithHelpers,
+} from 'mongoose';
 import { accessibleBy } from './utils/helpers';
 
-export type IAclQueryHelpers = {
-  withAccessFor: typeof AclQueryHelpers.withAccessFor;
-};
-function withAccessFor<T extends WithAcl>(
-  this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
-  action: string,
-  group: string,
-): QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>;
-function withAccessFor<T extends WithAcl, IUser = unknown>(
-  this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
-  action: string,
-  user?: IUser,
-): QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>;
-function withAccessFor<T extends WithAcl, IUser = unknown>(
-  this: QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers>,
-  action: string,
-  userOrGroup?: IUser | string,
-): QueryWithHelpers<T[], HydratedDocument<T>, IAclQueryHelpers> {
-  const filter: FilterQuery<T> = accessibleBy<T>(action, userOrGroup);
-  return this.where(filter);
+export interface IAclQueryHelpers {
+  withAccessFor<User = unknown>(
+    action: string,
+    userOrGroup: string | User,
+  ): this;
 }
-export const AclQueryHelpers = {
-  withAccessFor,
+
+export const IAclQueryHelpers: IAclQueryHelpers = {
+  withAccessFor<T extends WithAcl, IUser = unknown>(
+    this: QueryWithHelpers<
+      HydratedDocument<T>[],
+      HydratedDocument<T>,
+      IAclQueryHelpers
+    >,
+    action: string,
+    userOrGroup?: IUser | string,
+  ) {
+    const filter: FilterQuery<T> = accessibleBy<T>(action, userOrGroup);
+    return this.where(filter);
+  },
 };

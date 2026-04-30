@@ -1,4 +1,4 @@
-import { AclQueryHelpers } from './query-helpers';
+import { IAclQueryHelpers } from './query-helpers';
 import { AclMethods } from './methods';
 import { AclSchemaDefinition } from './schema/acl.schema';
 import { IAclSchema } from './interfaces';
@@ -9,7 +9,7 @@ export function AccessControlLists(oldSchema: Schema) {
     acl: AclSchemaDefinition,
   }) as IAclSchema;
 
-  const queryHelpers = AclQueryHelpers;
+  const queryHelpers = IAclQueryHelpers;
 
   for (const field in queryHelpers) {
     schema.query[field] = queryHelpers[field];
