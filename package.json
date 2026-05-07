@@ -1,6 +1,6 @@
 {
   "name": "@biocomputingup/nest-mongo-acl",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A NestJS module for Access Control List (ACL) management using MongoDB, Mongoose, and Typegoose.",
   "license": "MIT",
   "main": "dist/index.js",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@m8a/nestjs-typegoose": "^12.0.1",
     "@nestjs/cli": "11",
-    "@nestjs/mongoose": "^10.0.0 || ^11.0.0",
+    "@nestjs/mongoose": "^11.0.0",
     "@nestjs/schematics": "11",
     "@nestjs/testing": "11",
     "@typegoose/typegoose": "12",
@@ -51,6 +51,7 @@
     "eslint-plugin-prettier": "^5.0.0",
     "install-peers": "^1.0.4",
     "jest": "^29.5.0",
+    "mongodb-memory-server": "^11.1.0",
     "mongoose": "8",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
