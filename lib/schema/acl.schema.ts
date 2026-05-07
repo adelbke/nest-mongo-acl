@@ -1,7 +1,9 @@
 import { prop, PropType } from '@typegoose/typegoose';
 import { Prop, Schema as SchemaDec, SchemaFactory } from '@nestjs/mongoose';
-import { SchemaDefinition } from 'mongoose';
-import { IAcl } from 'lib/interfaces';
+import { Schema, SchemaDefinition } from 'mongoose';
+import { IAcl, WithAcl } from 'lib/interfaces';
+import { AclRegistry } from 'lib/acl.registry';
+import { actionsFromAction } from 'lib/utils/util';
 
 // @plugin((schema, opts) => {})
 @SchemaDec()
@@ -16,17 +18,53 @@ class Acl implements IAcl {
 }
 
 const AclSchema = SchemaFactory.createForClass(Acl);
-const AclSchemaDefinition: SchemaDefinition<IAcl> = {
-  policies: {
-    type: Map,
-    of: {
-      type: [{ type: String }],
+const AclSchemaDefinition: SchemaDefinition<WithAcl> = {
+  acl: {
+    default: {
+      policies: {},
+      publicPolicy: []
     },
-  },
-  publicPolicy: {
-    default: [],
-    type: [{ type: String }],
-  },
+    policies: {
+      default: {},
+      type: Schema.Types.Mixed,
+      validate: function (this: IAcl['policies']) {
+
+        // ensure the keys are strings and that the values are arrays of strings
+        Object.keys(this).forEach((key: string) => {
+          if (typeof key != 'string') {
+            return false;
+          }
+          const val = this[key];
+          if (!(val instanceof Array)) {
+            return false;
+          }
+          try {
+            actionsFromAction(val);
+          } catch (err) {
+            return false;
+          }
+
+        });
+        return true;
+      }
+    },
+    publicPolicy: {
+      default: [],
+      type: [String],
+      validate: function (this: IAcl['publicPolicy']) {
+        if (!Array.isArray(this)) {
+          return false;
+        }
+
+        try {
+          const actionsArray = actionsFromAction(this);
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
+    },
+  }
 };
 
 export { Acl, AclSchema, AclSchemaDefinition };

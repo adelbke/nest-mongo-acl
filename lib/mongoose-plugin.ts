@@ -1,15 +1,13 @@
-import { IAclQueryHelpers } from './query-helpers';
+import { AclQueryHelpers, IAclQueryHelpers } from './query-helpers';
 import { AclMethods } from './methods';
 import { AclSchemaDefinition } from './schema/acl.schema';
 import { IAclSchema } from './interfaces';
 import { Schema } from 'mongoose';
 
 export function AccessControlLists(oldSchema: Schema) {
-  const schema: IAclSchema = oldSchema.add({
-    acl: AclSchemaDefinition,
-  }) as IAclSchema;
+  const schema: IAclSchema = oldSchema.add(AclSchemaDefinition) as IAclSchema;
 
-  const queryHelpers = IAclQueryHelpers;
+  const queryHelpers = AclQueryHelpers;
 
   for (const field in queryHelpers) {
     schema.query[field] = queryHelpers[field];

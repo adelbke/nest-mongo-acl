@@ -1,6 +1,6 @@
 import { HydratedDocument, Model, Schema } from 'mongoose';
 import { IAclQueryHelpers } from './query-helpers';
-import { IAclMethods } from './methods';
+import { IAclMethods, } from './methods';
 import { Acl } from './schema/acl.schema';
 
 export interface IAcl {
@@ -10,8 +10,9 @@ export interface IAcl {
 
 // Parent Schema using Acl
 export type WithAcl = {
-  acl: Acl;
+  acl?: Acl;
 };
+
 
 // Parent Model using Acl with Query Helpers
 export type IAclModel = Model<WithAcl, IAclQueryHelpers, IAclMethods>;

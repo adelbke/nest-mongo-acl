@@ -14,7 +14,7 @@ export interface IAclQueryHelpers {
   ): this;
 }
 
-export const IAclQueryHelpers: IAclQueryHelpers = {
+export const AclQueryHelpers: IAclQueryHelpers = {
   withAccessFor<T extends WithAcl, IUser = unknown>(
     this: QueryWithHelpers<
       HydratedDocument<T>[],

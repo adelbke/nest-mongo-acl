@@ -1,11 +1,15 @@
 import { AclRegistry } from './acl.registry';
 import { IAclDocument, WithAcl } from './interfaces';
+import { actionsFromAction, initAcl } from './utils/util';
 
-function groupHasAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
+function groupHasAccess(
+  this: IAclDocument<WithAcl>,
   group: string,
   action: string,
 ): boolean {
+  if (!this.acl) {
+    return false;
+  }
   if (this.acl.publicPolicy.includes(action)) {
     return true;
   }
@@ -18,10 +22,13 @@ function groupHasAccess<T extends WithAcl>(
   return false;
 }
 function userHasAccess<T extends WithAcl, User = unknown>(
-  this: IAclDocument<T>,
+  this: IAclDocument<WithAcl>,
   user: User,
   action: string,
 ): boolean {
+  if (!this.acl) {
+    return false;
+  }
   // If the access to action is public, access is granted regardless of group or user
   if (this.acl.publicPolicy.includes(action)) {
     return true;
@@ -29,21 +36,15 @@ function userHasAccess<T extends WithAcl, User = unknown>(
   const userGroups = AclRegistry.getInstance().groupFromUser(user);
   return userGroups.some((group) => groupHasAccess.call(this, group, action));
 }
-function hasAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
-  group: string,
-  action: string,
-): boolean;
-function hasAccess<T extends WithAcl, User = unknown>(
-  this: IAclDocument<T>,
-  user: User,
-  action: string,
-): boolean;
-function hasAccess<T extends WithAcl, User = unknown>(
-  this: IAclDocument<T>,
+
+function hasAccess<User = unknown>(
+  this: IAclDocument<WithAcl>,
   groupOrUser: string | User,
   action: string,
 ): boolean {
+  if (!this.acl) {
+    return false;
+  }
   // If the access to action is public, access is granted regardless of group or user
   if (this.acl.publicPolicy.includes(action)) {
     return true;
@@ -53,71 +54,87 @@ function hasAccess<T extends WithAcl, User = unknown>(
   }
   return this.groupHasAccess(groupOrUser as string, action);
 }
-function revokeAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
+function revokeAccess(
+  this: IAclDocument<WithAcl>,
   group: string,
-  action: string,
+  actionOrActions: string | string[],
 ) {
+  initAcl(this);
   if (!this.acl.policies[group]) {
     return this; // No policies for this group, nothing to revoke
   }
-  const actions = this.acl.policies[group];
-  const index = actions.indexOf(action);
-  if (index > -1) {
-    actions.splice(index, 1); // Remove the action from the group's policies
+  const actionArr = actionsFromAction(actionOrActions);
+  for (const action of actionArr) {
+    const actions = this.acl.policies[group];
+    const index = actions.indexOf(action);
+    if (index > -1) {
+      actions.splice(index, 1); // Remove the action from the group's policies
+    }
   }
   return this;
 }
-function grantAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
+function grantAccess(
+  this: IAclDocument<WithAcl>,
   group: string,
-  action: string,
+  actionOrActions: string | string[],
 ) {
+  initAcl(this);
   if (!this.acl.policies[group]) {
     this.acl.policies[group] = [];
   }
-  this.acl.policies[group].push(action);
-  return this;
-}
-function grantPublicAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
-  action: string,
-) {
-  if (!this.acl.publicPolicy.includes(action)) {
-    this.acl.publicPolicy.push(action);
-  }
-  return this;
-}
-function revokePublicAccess<T extends WithAcl>(
-  this: IAclDocument<T>,
-  action: string,
-) {
-  const index = this.acl.publicPolicy.indexOf(action);
-  if (index > -1) {
-    this.acl.publicPolicy.splice(index, 1); // Remove the action from public policies
-  }
-  return this;
-}
-// export type IAclMethods = {
-//   hasAccess: typeof AclMethods.hasAccess;
-//   groupHasAccess: typeof AclMethods.groupHasAccess;
-//   grantAccess: typeof AclMethods.grantAccess;
-//   revokeAccess: typeof AclMethods.revokeAccess;
-//   userHasAccess: typeof AclMethods.userHasAccess;
-// };
 
-export type IAclMethods<T extends WithAcl = WithAcl> = {
-  hasAccess: typeof hasAccess<T>;
-  groupHasAccess: typeof groupHasAccess<T>;
-  grantAccess: typeof grantAccess<T>;
-  revokeAccess: typeof revokeAccess<T>;
-  userHasAccess: typeof userHasAccess<T>;
-  grantPublicAccess: typeof grantPublicAccess<T>;
-  revokePublicAccess: typeof revokePublicAccess<T>;
+  const actions = actionsFromAction(actionOrActions);
+  if (typeof actionOrActions == 'string') {
+    this.acl.policies[group].push(...actions);
+
+  }
+  return this;
+}
+function grantPublicAccess(
+  this: IAclDocument<WithAcl>,
+  actionOrActions: string | string[],
+) {
+  initAcl(this);
+
+  const actions = actionsFromAction(actionOrActions);
+  for (const action of actions) {
+    if (!this.acl.publicPolicy.includes(action)) {
+      this.acl.publicPolicy.push(action);
+    }
+  }
+  return this;
+}
+function revokePublicAccess(
+  this: IAclDocument<WithAcl>,
+  actionOrActions: string | string[],
+) {
+  initAcl(this);
+  const actions = actionsFromAction(actionOrActions);
+  for (const action of actions) {
+    const index = this.acl.publicPolicy.indexOf(action);
+    if (index > -1) {
+      this.acl.publicPolicy.splice(index, 1); // Remove the action from public policies
+    }
+  }
+  return this;
+}
+
+export type IAclMethods = {
+  hasAccess: typeof hasAccess;
+  groupHasAccess: typeof groupHasAccess;
+  grantAccess: typeof grantAccess;
+  revokeAccess: typeof revokeAccess;
+  userHasAccess: typeof userHasAccess;
+  grantPublicAccess: typeof grantPublicAccess;
+  revokePublicAccess: typeof revokePublicAccess;
 };
-export type AclMethodsCls<T extends WithAcl = WithAcl> = new (
+
+export type AclMethodsCls = new (
   ...args: any[]
-) => IAclMethods<T>;
+) => IAclMethods;
+
+export type WithAclMethods = WithAcl & IAclMethods;
+
 export const AclMethods = {
   groupHasAccess,
   hasAccess,

@@ -3,7 +3,7 @@ import { AclModuleOptions } from './acl.module-options';
 export class AclRegistry {
   private static instance: AclRegistry;
 
-  private constructor() {}
+  private constructor() { }
   public static getInstance(): AclRegistry {
     if (!AclRegistry.instance) {
       AclRegistry.instance = new AclRegistry();
@@ -19,6 +19,15 @@ export class AclRegistry {
         return result;
       }
     };
+  }
+
+  private defaultAcl = {
+    policies: {},
+    publicPolicy: [],
+  };
+
+  public getDefaultAcl() {
+    return { ...this.defaultAcl };
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public groupFromUser<UserType = any>(_user?: UserType): string[] {

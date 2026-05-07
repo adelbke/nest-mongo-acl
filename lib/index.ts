@@ -1,5 +1,5 @@
 export * from './schema/acl.schema';
-export { IAclQueryHelpers } from './query-helpers';
+export { IAclQueryHelpers as IAclQueryHelpers } from './query-helpers';
 export {
   revokeAccessTo,
   revokeToMany,

@@ -82,7 +82,9 @@ import { type } from '@typegoose/typegoose';
 export class Person implements WithAcl { // Implement interface to get correct type
   @prop({type: () => String})
   surname: string;
-  acl: IAcl
+
+  // ensure it's optional, as defining it won't ensure it's setup in all the docs
+  acl?: Acl
 }
 
 // Update the type of the model to include methods and query helpers
@@ -102,7 +104,7 @@ export class Person implements WithAcl { // Implement interface to get correct t
   @Prop({ type: String }) // For mongoose schema
   surname: string;
   
-  acl: IAcl
+  acl: Acl
 }
 
 const PersonSchema = SchemaFactory.createForClass(Person); // For mongoose schema
@@ -127,7 +129,8 @@ export type PersonDocument = HydratedDocument<Person, IAclMethods>;
 Through a document instance
 
 ```typescript
-const doc: PersonDocument;
+const doc: PersonDocument = new PersonModel();
+
 // This will mutate the state of the document to grant admins read access to the document
 doc.grantAccess('admins', 'read');
 // This will mutate the state of the document to revoke admins read access to the document
