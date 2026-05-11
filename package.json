@@ -1,6 +1,6 @@
 {
   "name": "@biocomputingup/nest-mongo-acl",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A NestJS module for Access Control List (ACL) management using MongoDB, Mongoose, and Typegoose.",
   "license": "MIT",
   "main": "dist/index.js",
