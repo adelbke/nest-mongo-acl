@@ -1,6 +1,5 @@
-import { IAclQueryHelpers } from './query-helpers';
+import { AclQueryHelpers } from './query-helpers';
 import {
-  accessibleBy,
   grantAccessTo,
   grantToMany,
   revokeAccessTo,
@@ -38,7 +37,7 @@ describe('AclQueryHelpers', () => {
     };
 
     it('should return a query that includes publicPolicy when action is public', () => {
-      const result = IAclQueryHelpers.withAccessFor.call(
+      const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
         'someUser',
@@ -54,7 +53,7 @@ describe('AclQueryHelpers', () => {
     });
 
     it('should return a query that includes user groups when user has groups', () => {
-      const result = IAclQueryHelpers.withAccessFor.call(
+      const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
         { role: 'userWithGroups' },
@@ -72,7 +71,7 @@ describe('AclQueryHelpers', () => {
     });
 
     it('should return a query that only includes publicPolicy when user has no groups', () => {
-      const result = IAclQueryHelpers.withAccessFor.call(
+      const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
         { role: 'userWithoutGroups' },
@@ -86,7 +85,7 @@ describe('AclQueryHelpers', () => {
     });
 
     it('should handle undefined user gracefully', () => {
-      const result = IAclQueryHelpers.withAccessFor.call(
+      const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
         undefined,
@@ -100,7 +99,7 @@ describe('AclQueryHelpers', () => {
     });
 
     it('should handle null user gracefully', () => {
-      const result = IAclQueryHelpers.withAccessFor.call(
+      const result = AclQueryHelpers.withAccessFor.call(
         mockQuery as unknown as types.QueryHelperThis<Type & WithAcl, any>,
         mockAction,
         null,

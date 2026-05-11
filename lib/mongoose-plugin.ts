@@ -1,4 +1,4 @@
-import { AclQueryHelpers, IAclQueryHelpers } from './query-helpers';
+import { AclQueryHelpers } from './query-helpers';
 import { AclMethods } from './methods';
 import { AclSchemaDefinition } from './schema/acl.schema';
 import { IAclSchema } from './interfaces';
